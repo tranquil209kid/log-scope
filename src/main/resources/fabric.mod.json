@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "logscope",
+	"version": "${version}",
+	"name": "Log Scope",
+	"description": "A lightweight title screen log viewer",
+	"authors": [
+		"tranquil209kid"
+	],
+	"contact": {
+		"homepage": "https://github.com/tranquil209kid/log-scope",
+		"sources": "https://github.com/tranquil209kid/log-scope",
+		"issues": "https://github.com/tranquil209kid/log-scope/issues"
+	},
+	"license": "LGPL-3.0 license",
+	"icon": "assets/logscope/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [],
+		"client": [
+			"io.logscope.LogScopeClient"
+		]
+	},
+	"mixins": [
+		"logscope.mixins.json"
+	],
+	"accessWidener": "logscope.accesswidener",
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
