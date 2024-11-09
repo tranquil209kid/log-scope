@@ -27,7 +27,7 @@ public class LogScopeClient implements ClientModInitializer {
 		Logger rootLogger = LogManager.getRootLogger();
 
 		AbstractAppender appender = new AbstractAppender(
-				"ConsoleOverlayAppender",
+				"LogScopeOverlayAppender",
 				null,
 				PatternLayout.createDefaultLayout(),
 				true,
