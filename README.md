@@ -1,4 +1,4 @@
-# LogScope
+# Log Scope
 
 ![Icon](https://cdn.modrinth.com/data/cached_images/baf9b0c961bc9b84eed82a39e2274a8c09e1c816_0.webp)
 
