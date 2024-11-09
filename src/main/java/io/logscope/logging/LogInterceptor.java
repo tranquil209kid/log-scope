@@ -1,5 +1,6 @@
-package io.logscope;
+package io.logscope.logging;
 
+import io.logscope.LogScope;
 import io.logscope.message.MessageLevel;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
