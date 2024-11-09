@@ -19,6 +19,9 @@
 		"main": [],
 		"client": [
 			"io.logscope.LogScopeClient"
+		],
+		"preLaunch": [
+			"io.logscope.LogScopePreLaunch"
 		]
 	},
 	"mixins": [
