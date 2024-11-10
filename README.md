@@ -33,7 +33,7 @@ This mod takes inspiration from and adapts the Console widget originally impleme
 - Fabric API
 
 ## Installation
-1. Install Fabric Loader and the API for Minecraft a version compatible with LogScope
+1. Install Fabric Loader and the API for a Minecraft version compatible with LogScope
 2. Download LogScope
 3. Place the .jar file in your mods folder
 4. Start Minecraft
