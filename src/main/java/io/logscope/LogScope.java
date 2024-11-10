@@ -15,11 +15,11 @@ public class LogScope implements LogScopeSink {
     private final ArrayDeque<Message> messages = new ArrayDeque<>();
 
     @Override
-    public void logMessage(@NotNull MessageLevel level, @NotNull Text text, double duration) {
+    public void logMessage(@NotNull MessageLevel level, @NotNull Text text) {
         Validate.notNull(level);
         Validate.notNull(text);
 
-        this.messages.addLast(new Message(level, text.copy(), duration));
+        this.messages.addLast(new Message(level, text.copy()));
     }
 
     public Deque<Message> getMessageDrain() {

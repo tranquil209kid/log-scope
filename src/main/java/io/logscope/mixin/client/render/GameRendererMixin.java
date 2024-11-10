@@ -1,4 +1,4 @@
-package io.logscope.mixin;
+package io.logscope.mixin.client.render;
 
 import io.logscope.LogScopeHooks;
 import net.minecraft.client.MinecraftClient;

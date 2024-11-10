@@ -1,4 +1,4 @@
-package io.logscope.mixin;
+package io.logscope.mixin.client.gui;
 
 import io.logscope.LogScopeRenderer;
 import io.logscope.util.Dim2i;

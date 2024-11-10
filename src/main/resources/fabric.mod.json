@@ -14,14 +14,14 @@
 	},
 	"license": "LGPL-3.0 license",
 	"icon": "assets/logscope/icon.png",
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {
 		"main": [],
-		"client": [
-			"io.logscope.LogScopeClient"
-		],
 		"preLaunch": [
 			"io.logscope.LogScopePreLaunch"
+		],
+		"client": [
+			"io.logscope.LogScopeClient"
 		]
 	},
 	"mixins": [

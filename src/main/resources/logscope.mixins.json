@@ -7,8 +7,8 @@
     "defaultRequire": 1
   },
   "client": [
-    "GameRendererMixin",
-    "MouseMixin",
-    "TitleScreenMixin"
+    "client.render.GameRendererMixin",
+    "client.input.MouseMixin",
+    "client.gui.TitleScreenMixin"
   ]
 }

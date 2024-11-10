@@ -18,7 +18,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class LogInterceptor {
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
-    private static final double LOG_DURATION = Double.MAX_VALUE;
 
     public static final Queue<CachedLogMessage> CACHED_MESSAGES = new ConcurrentLinkedQueue<>();
 
@@ -53,8 +52,7 @@ public class LogInterceptor {
                         MinecraftClient.getInstance().execute(() ->
                                 LogScope.instance().logMessage(
                                         level,
-                                        Text.literal(logMessage),
-                                        LOG_DURATION
+                                        Text.literal(logMessage)
                                 )
                         );
                     }
@@ -70,8 +68,7 @@ public class LogInterceptor {
         CACHED_MESSAGES.forEach(cached ->
                 LogScope.instance().logMessage(
                         cached.level(),
-                        Text.literal(cached.message()),
-                        LOG_DURATION
+                        Text.literal(cached.message())
                 )
         );
         CACHED_MESSAGES.clear();
