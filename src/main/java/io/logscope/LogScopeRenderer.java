@@ -2,6 +2,7 @@ package io.logscope;
 
 import io.logscope.color.ColorARGB;
 import io.logscope.color.ColorU8;
+import io.logscope.input.MouseInputHandler;
 import io.logscope.message.Message;
 import io.logscope.message.MessageLevel;
 import net.minecraft.client.MinecraftClient;
@@ -21,19 +22,19 @@ import java.util.List;
 
 public class LogScopeRenderer {
     public static final LogScopeRenderer INSTANCE = new LogScopeRenderer();
+    private final MouseInputHandler mouseHandler = new MouseInputHandler();
 
     private final LinkedList<ActiveMessage> activeMessages = new LinkedList<>();
     private static final int MAX_HEIGHT = 120;
     private static final int MAX_VISIBLE_MESSAGES = 5;
     private static final int SCROLLBAR_WIDTH = 4;
     private int scrollOffset = 0;
-    private boolean isDraggingScrollbar = false;
     private static boolean isVisible = false;
-    private double lastMouseY = 0;
 
     public void update(LogScope logScope, double currentTime) {
         this.purgeMessages(currentTime);
         this.pollMessages(logScope, currentTime);
+        this.mouseHandler.updateState(activeMessages.size(), MAX_VISIBLE_MESSAGES);
     }
 
     private void purgeMessages(double currentTime) {
@@ -59,27 +60,19 @@ public class LogScopeRenderer {
 
     public void mouseClicked(double mouseX, double mouseY) {
         if (isMouseOverScrollbar(mouseX, mouseY)) {
-            isDraggingScrollbar = true;
-            lastMouseY = mouseY;
+            mouseHandler.startDrag(mouseY);
+            mouseDragged(mouseX, mouseY);
         }
     }
 
     public void mouseReleased() {
-        isDraggingScrollbar = false;
+        mouseHandler.endDrag();
     }
 
     public void mouseDragged(double mouseX, double mouseY) {
-        if (isDraggingScrollbar) {
-            double delta = mouseY - lastMouseY;
-            int totalMessages = activeMessages.size();
-            if (totalMessages > MAX_VISIBLE_MESSAGES) {
-                double scrollFactor = delta / (MAX_HEIGHT * 1.0);
-                int scrollAmount = (int)(scrollFactor * (totalMessages - MAX_VISIBLE_MESSAGES));
-                scrollOffset = MathHelper.clamp(scrollOffset + scrollAmount,
-                        0,
-                        totalMessages - MAX_VISIBLE_MESSAGES);
-            }
-            lastMouseY = mouseY;
+        if (mouseHandler.isDragging()) {
+            mouseHandler.updateDrag(mouseY, activeMessages.size(), MAX_VISIBLE_MESSAGES);
+            scrollOffset = mouseHandler.getScrollOffset(activeMessages.size(), MAX_VISIBLE_MESSAGES);
         }
     }
 
@@ -180,10 +173,16 @@ public class LogScopeRenderer {
         context.fill(x, y, x + width, y + height,
                 ColorARGB.pack(30, 30, 30, 180));
 
-        int handleHeight = Math.max(20, height / Math.max(1, activeMessages.size() / MAX_VISIBLE_MESSAGES));
+        int totalMessages = activeMessages.size();
+        int visiblePercentage = Math.min(100, (MAX_VISIBLE_MESSAGES * 100) / Math.max(1, totalMessages));
+        int handleHeight = Math.max(20, (height * visiblePercentage) / 100);
         int handleY = y + (int)((height - handleHeight) * progress);
-        context.fill(x, handleY, x + width, handleY + handleHeight,
-                ColorARGB.pack(128, 128, 128, 200));
+
+        int handleColor = mouseHandler.isDragging() ?
+                ColorARGB.pack(160, 160, 160, 200):
+                ColorARGB.pack(128, 128, 128, 200);
+
+        context.fill(x, handleY, x + width, handleY + handleHeight, handleColor);
     }
 
     private static double getMessageOpacity(ActiveMessage message, double time) {
