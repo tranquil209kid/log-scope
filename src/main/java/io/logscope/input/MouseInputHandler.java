@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2024 tranquil209kid
+ * Licensed under the EUPL v1.2
+ */
+
 package io.logscope.input;
 
 import net.minecraft.util.math.MathHelper;

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2024 tranquil209kid
+ * Licensed under the EUPL v1.2
+ */
+
 package io.logscope.widget;
 
 import io.logscope.util.Dim2i;

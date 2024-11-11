@@ -46,7 +46,7 @@ java {
 }
 
 jar {
-	from("LICENSE.txt") {
+	from("LICENSE.md") {
 		rename { "${it}_${project.base.archivesName.get()}"}
 	}
 }
