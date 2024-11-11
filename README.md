@@ -1,42 +1,72 @@
-# Log Scope
+<div align="center">
 
-![Icon](https://cdn.modrinth.com/data/cached_images/baf9b0c961bc9b84eed82a39e2274a8c09e1c816_0.webp)
+# LogScope
 
-A lightweight title screen log viewer for Minecraft.
+![Icon](https://cdn.modrinth.com/data/cached_images/b9cade4b06bc533b1fab3a67cad6c39acc2e4f25_0.webp)
 
-## Overview
-LogScope adds a small button to your title screen that lets you view Minecraft's logs in real-time. No more digging through log files or keeping external windows open - just click and view.
+### A lightweight, real-time log viewer for your Minecraft title screen
 
-This mod takes inspiration from and adapts the Console widget originally implemented in [Sodium](https://github.com/CaffeineMC/sodium-fabric) by JellySquid3 and contributors. The original implementation has been modified to work as a standalone feature on the title screen.
+[![Fabric API](https://img.shields.io/badge/Fabric%20API-Required-blue)](https://modrinth.com/mod/fabric-api)
+[![License](https://img.shields.io/badge/License-LGPL%203.0-green.svg)](LICENSE.txt)
+[![Minecraft](https://img.shields.io/badge/Minecraft-Compatible-brightgreen)](https://minecraft.net)
 
-## Features
-- Clean, minimalistic log display
-- Real-time log updates
-- Easy toggle with a single button
-- Scrollable log window
-- Color-coded messages (Info, Warning, Error)
+</div>
 
-![Color-coded messages](https://cdn.modrinth.com/data/cached_images/8ac95412dc34d08edd1f0952c0fd03b677497465.png)
+## ✨ Features
 
-## Usage
-1. Start Minecraft with the mod installed
-2. Click the "Show Logs" button in the top-right corner of the title screen
-3. Use the scrollbar or mouse wheel to navigate through logs
+- 📊 Real-time log monitoring directly from the title screen
+- 🎨 Color-coded messages (Info, Warning, Error)
+- 🔄 Automatic updates as new logs appear
+- 📜 Scrollable log window with smooth navigation
+- 🎯 Single-click toggle for instant access
+- 🪶 Lightweight and performance-friendly
+
+## 📸 Screenshots
+
+<div align="center">
+
+![Color-coded messages](https://cdn.modrinth.com/data/cached_images/1ab0c7fe7b805b32e81aad9cd44466d045b79344_0.webp)
+
+![Example1](https://cdn.modrinth.com/data/cached_images/0adfbea43675d5210e5dfd5d88a94433ef09c79d_0.webp)
+![Example2](https://cdn.modrinth.com/data/cached_images/b98be043177a897007e0c4f57a1efb968ddf34d5_0.webp)
+*LogScope in action*
+
+</div>
+
+## 🚀 Quick Start
+
+1. Click the "Show Logs" button in the top-right corner of your title screen
+2. View logs in real-time as they appear
+3. Scroll through the log history using your mouse wheel or the scrollbar
 4. Click "Hide Logs" to close the window
 
-![Example1](https://cdn.modrinth.com/data/cached_images/c40ec6aa4479572dfaa19e1d5c70daf231392eec_0.webp)
-![Example2](https://cdn.modrinth.com/data/cached_images/9f1aefe424ffe928723fd3ee36d7a23f9357f3af_0.webp)
+## 📋 Requirements
 
-## Requirements
-- Minecraft version compatible with LogScope
-- Fabric Loader >=0.15.11
+- Minecraft (Compatible version)
+- Fabric Loader ≥0.15.11
 - Fabric API
 
-## Installation
-1. Install Fabric Loader and the API for a Minecraft version compatible with LogScope
-2. Download LogScope
-3. Place the .jar file in your mods folder
-4. Start Minecraft
+## 💻 Installation
 
-## License
-LGPL-3.0 License - see the [LICENSE](https://github.com/tranquil209kid/log-scope/blob/master/LICENSE.txt) file for details.
+1. Install [Fabric Loader](https://fabricmc.net/use/installer/) and Fabric API
+2. Download the latest version of LogScope
+3. Drop the .jar file into your `mods` folder
+4. Launch Minecraft and enjoy!
+
+## 💡 Credits
+
+LogScope adapts and builds upon the Console widget originally implemented in [Sodium](https://github.com/CaffeineMC/sodium-fabric) by JellySquid3 and contributors. The implementation has been modified to work as a standalone feature on the title screen.
+
+## 📜 License
+
+LogScope is licensed under the LGPL-3.0 License - see the [LICENSE](LICENSE.txt) file for details.
+
+---
+
+<div align="center">
+
+Made with ❤️ for the Minecraft community
+
+[Report an Issue](https://github.com/tranquil209kid/log-scope/issues) | [Download Latest Release](https://modrinth.com/mod/log-scope)
+
+</div>
