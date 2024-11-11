@@ -7,7 +7,7 @@
 ### A lightweight, real-time log viewer for your Minecraft title screen
 
 [![Fabric API](https://img.shields.io/badge/Fabric%20API-Required-blue)](https://modrinth.com/mod/fabric-api)
-[![License](https://img.shields.io/badge/License-LGPL%203.0-green.svg)](LICENSE.txt)
+[![License](https://img.shields.io/badge/License-EUPL%20v1.2-green.svg)](LICENSE.md)
 [![Minecraft](https://img.shields.io/badge/Minecraft-Compatible-brightgreen)](https://minecraft.net)
 
 </div>
