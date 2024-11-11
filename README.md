@@ -25,7 +25,9 @@
 
 <div align="center">
 
-![Color-coded messages](https://cdn.modrinth.com/data/cached_images/1ab0c7fe7b805b32e81aad9cd44466d045b79344_0.webp)
+![Color-coded logs](https://cdn.modrinth.com/data/cached_images/1ab0c7fe7b805b32e81aad9cd44466d045b79344_0.webp)
+
+*Color-coded logs*
 
 ![Example1](https://cdn.modrinth.com/data/cached_images/0adfbea43675d5210e5dfd5d88a94433ef09c79d_0.webp)
 ![Example2](https://cdn.modrinth.com/data/cached_images/b98be043177a897007e0c4f57a1efb968ddf34d5_0.webp)
