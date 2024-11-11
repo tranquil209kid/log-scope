@@ -62,7 +62,7 @@ LogScope adapts and builds upon the Console widget originally implemented in [So
 
 ## 📜 License
 
-LogScope is licensed under the EUPL v1.2 - see the [LICENSE](LICENSE.md) file for details.
+LogScope is licensed under the EUPL v1.2 license - see the [LICENSE](LICENSE.md) file for details.
 
 ---
 
