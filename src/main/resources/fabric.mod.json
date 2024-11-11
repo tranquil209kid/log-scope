@@ -12,7 +12,7 @@
 		"sources": "https://github.com/tranquil209kid/log-scope",
 		"issues": "https://github.com/tranquil209kid/log-scope/issues"
 	},
-	"license": "LGPL-3.0 license",
+	"license": "EUPL v1.2",
 	"icon": "assets/logscope/icon.png",
 	"environment": "client",
 	"entrypoints": {
