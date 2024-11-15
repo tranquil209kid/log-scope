@@ -19,14 +19,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 public class FlatButtonWidget extends AbstractWidget implements Drawable {
-    private final Dim2i dim;
+    public final Dim2i dim;
     private final Runnable action;
 
     private @NotNull Style style = Style.defaults();
 
     private boolean selected;
     private boolean enabled = true;
-    private boolean visible = true;
+    public boolean visible = true;
 
     private Text label;
 

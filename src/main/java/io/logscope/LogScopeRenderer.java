@@ -10,6 +10,8 @@ import io.logscope.color.ColorU8;
 import io.logscope.input.MouseInputHandler;
 import io.logscope.message.Message;
 import io.logscope.message.MessageLevel;
+import io.logscope.util.Dim2i;
+import io.logscope.widget.FlatButtonWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextHandler;
 import net.minecraft.client.gui.DrawContext;
@@ -20,15 +22,15 @@ import net.minecraft.util.Language;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class LogScopeRenderer {
     public static final LogScopeRenderer INSTANCE = new LogScopeRenderer();
     private final MouseInputHandler mouseHandler = new MouseInputHandler();
     private final LinkedList<ActiveMessage> activeMessages = new LinkedList<>();
+    private final Map<MessageLevel, Boolean> messageFilters = new EnumMap<>(MessageLevel.class);
+    private final List<FlatButtonWidget> filterButtons = new ArrayList<>();
 
     private static final int MAX_HEIGHT = 150;
     private static final int MAX_VISIBLE_MESSAGES = 6;
@@ -38,15 +40,27 @@ public class LogScopeRenderer {
     private static final int MESSAGE_SPACING = 2;
     private static final int HEADER_HEIGHT = 20;
     private static final int MESSAGE_PADDING = 6;
+    private static final int FILTER_BUTTON_WIDTH = 60;
+    private static final int FILTER_BUTTON_HEIGHT = 16;
+    private static final int FILTER_BUTTON_SPACING = 4;
 
     private int scrollOffset = 0;
     private static boolean isVisible = false;
     private float animationProgress = 0.0f;
     private static final float ANIMATION_SPEED = 0.2f;
 
+    public LogScopeRenderer() {
+        for (MessageLevel level : MessageLevel.values()) {
+            messageFilters.put(level, true);
+        }
+    }
+
     public void update(LogScope logScope, double currentTime) {
         this.pollMessages(logScope, currentTime);
-        this.mouseHandler.updateState(activeMessages.size(), MAX_VISIBLE_MESSAGES);
+        var filteredMessages = activeMessages.stream()
+                .filter(msg -> messageFilters.get(msg.level()))
+                .collect(Collectors.toList());
+        this.mouseHandler.updateState(filteredMessages.size(), MAX_VISIBLE_MESSAGES);
 
         if (isVisible && animationProgress < 1.0f) {
             animationProgress = Math.min(1.0f, animationProgress + ANIMATION_SPEED);
@@ -62,19 +76,68 @@ public class LogScopeRenderer {
         }
     }
 
-    public void handleScroll(double mouseX, double mouseY, double amount) {
-        if (isMouseOverConsole(mouseX, mouseY)) {
-            scrollOffset = MathHelper.clamp(scrollOffset - (int)amount,
-                    0,
-                    Math.max(0, activeMessages.size() - MAX_VISIBLE_MESSAGES));
+    private void initFilterButtons(int x, int y) {
+        filterButtons.clear();
+        int buttonX = x + CONSOLE_WIDTH - (MessageLevel.values().length * (FILTER_BUTTON_WIDTH + FILTER_BUTTON_SPACING));
+
+        for (MessageLevel level : MessageLevel.values()) {
+            FlatButtonWidget button = new FlatButtonWidget(
+                    new Dim2i(buttonX, y + 2, FILTER_BUTTON_WIDTH, FILTER_BUTTON_HEIGHT),
+                    Text.literal(level.name()),
+                    () -> toggleFilter(level)
+            );
+
+            var style = FlatButtonWidget.Style.defaults();
+            style.bgDefault = getFilterButtonColor(level, false);
+            style.bgHovered = getFilterButtonColor(level, true);
+            button.setStyle(style);
+            button.setSelected(messageFilters.get(level));
+
+            filterButtons.add(button);
+            buttonX += FILTER_BUTTON_WIDTH + FILTER_BUTTON_SPACING;
         }
     }
 
-    public void mouseClicked(double mouseX, double mouseY) {
+    private int getFilterButtonColor(MessageLevel level, boolean hovered) {
+        int alpha = hovered ? 0xE0 : 0x90;
+        return switch (level) {
+            case INFO -> ColorARGB.pack(76, 175, 80, alpha);
+            case WARN -> ColorARGB.pack(255, 152, 0, alpha);
+            case SEVERE -> ColorARGB.pack(244, 67, 54, alpha);
+        };
+    }
+
+    private void toggleFilter(MessageLevel level) {
+        messageFilters.put(level, !messageFilters.get(level));
+        filterButtons.stream()
+                .filter(button -> button.getLabel().getString().equals(level.name()))
+                .findFirst()
+                .ifPresent(button -> button.setSelected(messageFilters.get(level)));
+    }
+
+    public void handleScroll(double mouseX, double mouseY, double amount) {
+        if (isMouseOverConsole(mouseX, mouseY)) {
+            var filteredCount = activeMessages.stream()
+                    .filter(msg -> messageFilters.get(msg.level()))
+                    .count();
+            scrollOffset = MathHelper.clamp(scrollOffset - (int)amount,
+                    0,
+                    Math.max(0, (int)filteredCount - MAX_VISIBLE_MESSAGES));
+        }
+    }
+
+    public boolean mouseClicked(double mouseX, double mouseY) {
+        for (FlatButtonWidget button : filterButtons) {
+            if (button.mouseClicked(mouseX, mouseY, 0)) {
+                return true;
+            }
+        }
         if (isMouseOverScrollbar(mouseX, mouseY)) {
             mouseHandler.startDrag(mouseY);
             mouseDragged(mouseX, mouseY);
+            return true;
         }
+        return false;
     }
 
     public void mouseReleased() {
@@ -83,8 +146,11 @@ public class LogScopeRenderer {
 
     public void mouseDragged(double mouseX, double mouseY) {
         if (mouseHandler.isDragging()) {
-            mouseHandler.updateDrag(mouseY, activeMessages.size(), MAX_VISIBLE_MESSAGES);
-            scrollOffset = mouseHandler.getScrollOffset(activeMessages.size(), MAX_VISIBLE_MESSAGES);
+            var filteredCount = activeMessages.stream()
+                    .filter(msg -> messageFilters.get(msg.level()))
+                    .count();
+            mouseHandler.updateDrag(mouseY, (int)filteredCount, MAX_VISIBLE_MESSAGES);
+            scrollOffset = mouseHandler.getScrollOffset((int)filteredCount, MAX_VISIBLE_MESSAGES);
         }
     }
 
@@ -125,13 +191,25 @@ public class LogScopeRenderer {
         drawConsoleBackground(context, x, y);
         drawConsoleHeader(context, client, x, y);
 
+        if (filterButtons.isEmpty()) {
+            initFilterButtons(x, y);
+        }
+
+        for (FlatButtonWidget button : filterButtons) {
+            button.render(context, (int) client.mouse.getX(), (int) client.mouse.getY(), 0);
+        }
+
         y += HEADER_HEIGHT + 2;
         int availableHeight = MAX_HEIGHT - HEADER_HEIGHT - CONSOLE_PADDING * 2;
 
+        List<ActiveMessage> filteredMessages = activeMessages.stream()
+                .filter(msg -> messageFilters.get(msg.level()))
+                .collect(Collectors.toList());
+
         List<ActiveMessage> visibleMessages = new ArrayList<>();
-        int endIndex = Math.min(activeMessages.size(), scrollOffset + MAX_VISIBLE_MESSAGES);
+        int endIndex = Math.min(filteredMessages.size(), scrollOffset + MAX_VISIBLE_MESSAGES);
         for (int i = scrollOffset; i < endIndex; i++) {
-            visibleMessages.add(activeMessages.get(i));
+            visibleMessages.add(filteredMessages.get(i));
         }
 
         int contentY = y;
@@ -158,11 +236,11 @@ public class LogScopeRenderer {
             contentY += messageHeight + MESSAGE_SPACING;
         }
 
-        if (activeMessages.size() > MAX_VISIBLE_MESSAGES) {
+        if (filteredMessages.size() > MAX_VISIBLE_MESSAGES) {
             drawScrollbar(context, x + CONSOLE_WIDTH - SCROLLBAR_WIDTH,
                     y, SCROLLBAR_WIDTH,
                     availableHeight,
-                    scrollOffset / (float)(activeMessages.size() - MAX_VISIBLE_MESSAGES));
+                    scrollOffset / (float)(filteredMessages.size() - MAX_VISIBLE_MESSAGES));
         }
 
         matrices.pop();
@@ -212,7 +290,6 @@ public class LogScopeRenderer {
 
         int textY = y + MESSAGE_SPACING;
         int textX = x + MESSAGE_PADDING;
-        int maxTextWidth = messageWidth - MESSAGE_PADDING * 2;
 
         for (OrderedText line : lines) {
             context.drawText(client.textRenderer, line,
@@ -228,7 +305,9 @@ public class LogScopeRenderer {
         context.fill(x, y, x + width, y + height,
                 ColorARGB.pack(40, 40, 40, (int)(alpha * 200)));
 
-        int totalMessages = activeMessages.size();
+        int totalMessages = (int)activeMessages.stream()
+                .filter(msg -> messageFilters.get(msg.level()))
+                .count();
         int visiblePercentage = Math.min(100, (MAX_VISIBLE_MESSAGES * 100) / Math.max(1, totalMessages));
         int handleHeight = Math.max(30, (height * visiblePercentage) / 100);
         int handleY = y + (int)((height - handleHeight) * progress);
