@@ -2,7 +2,7 @@
 
 # LogScope
 
-![Icon](https://cdn.modrinth.com/data/cached_images/b9cade4b06bc533b1fab3a67cad6c39acc2e4f25_0.webp)
+![Icon](https://cdn.modrinth.com/data/cached_images/1bf9479062ef729807b4af1de9a8620d201969c2.png)
 
 ### A lightweight, real-time log viewer for your Minecraft title screen
 
